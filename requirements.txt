@@ -1,0 +1,3 @@
+
+Django==4.1.1
+django-form-surveys==1.5
