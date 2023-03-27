@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signup } from '../actions/auth';
+import validator from 'validator';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -15,6 +16,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 
@@ -29,7 +34,7 @@ const Signup = ({ signup, isAuthenticated }) => {
 
     });
 
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors ] = useState('');
 
     const theme = createTheme();
 
@@ -37,7 +42,6 @@ const Signup = ({ signup, isAuthenticated }) => {
     const { first_name, last_name, email, password, re_password } = formData;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-
 
 
     const onSubmit = e => {
@@ -53,6 +57,12 @@ const Signup = ({ signup, isAuthenticated }) => {
         if (password !== re_password) {
             errors.re_password = 'Passwords do not match';
         }
+        if (validator.isStrongPassword(password, {
+            minLength: 8, minLowercase: 1,
+            minUppercase: 1, minNumbers: 1, minSymbols: 1
+          })) {
+            errors.password = 'Password is weak';
+        } 
         if (Object.keys(errors).length > 0) {
             setErrors(errors);
             return;
@@ -173,8 +183,10 @@ const Signup = ({ signup, isAuthenticated }) => {
                                 value={password}
                                 onChange={e => onChange(e)}
                                 minLength='6'
+
                             />
                             {errors.password && <span>{errors.password}</span>}
+
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
