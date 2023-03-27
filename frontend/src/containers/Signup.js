@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signup } from '../actions/auth';
 import validator from 'validator';
+import PasswordChecklist from 'react-password-checklist';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -34,6 +35,9 @@ const Signup = ({ signup, isAuthenticated }) => {
 
     });
 
+    const [passwordAgain, setPasswordAgain] = useState("")
+
+
     const [errors, setErrors ] = useState('');
 
     const theme = createTheme();
@@ -57,12 +61,6 @@ const Signup = ({ signup, isAuthenticated }) => {
         if (password !== re_password) {
             errors.re_password = 'Passwords do not match';
         }
-        if (validator.isStrongPassword(password, {
-            minLength: 8, minLowercase: 1,
-            minUppercase: 1, minNumbers: 1, minSymbols: 1
-          })) {
-            errors.password = 'Password is weak';
-        } 
         if (Object.keys(errors).length > 0) {
             setErrors(errors);
             return;
@@ -206,6 +204,13 @@ const Signup = ({ signup, isAuthenticated }) => {
                             />
                             {errors.re_password && <span>{errors.re_password}</span>}
                         </Grid>
+                        <PasswordChecklist
+                            rules={["minLength","specialChar","number","capital","match"]}
+                            minLength={5}
+                            value={password}
+                            valueAgain={re_password}
+                            onChange={(isValid) => {}}
+                        />
                     </Grid>
                     <Button
                         type="submit"

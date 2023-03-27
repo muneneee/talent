@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { reset_password_confirm } from '../actions/auth';
+import PasswordChecklist from 'react-password-checklist';
+
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -125,6 +127,15 @@ const ResetPasswordConfirm = ({ match, reset_password_confirm }) => {
                                 minLength='6'
                             />
                             {errors.re_new_password && <span>{errors.re_new_password}</span>}
+                        </Grid>
+                        <Grid>
+                            <PasswordChecklist
+                                rules={["minLength","specialChar","number","capital","match"]}
+                                minLength={5}
+                                value={new_password}
+                                valueAgain={re_new_password}
+                                onChange={(isValid) => {}}
+                            />
                         </Grid>
                     </Grid>
                     <Button
