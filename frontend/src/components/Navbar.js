@@ -74,6 +74,9 @@ const darkTheme = createTheme({
       primary: {
         main: '#1976d2',
       },
+      background: {
+        default: '#cad5e0',
+      },
     },
 });
 

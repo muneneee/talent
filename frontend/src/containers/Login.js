@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { login } from '../actions/auth';
+import { LOGIN_FAIL } from '../actions/types';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -20,44 +21,52 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
 const Login = ({ login, isAuthenticated }) => {
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    });
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
 
+  const { email, password } = formData;
+  const [errors, setErrors] = useState({});
 
-    const { email, password } = formData;
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-    const onSubmit = e => {
-        e.preventDefault();
-
-        login(email, password);
-    };
-
-    if (isAuthenticated) {
-        return <Navigate replace to='/' />
+  const onSubmit = async e => {
+    e.preventDefault();
+  
+    const errors = {};
+  
+    try {
+      await login(email, password);
+    } catch (err) {
+      if (err.response?.status === 401) {
+        errors.password = 'Password or email incorrect';
+      }
     }
+  
+    setErrors(errors);
+  };
 
-    function Copyright(props) {
-        return (
-          <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-              Talent Assessment
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-          </Typography>
-        );
-    }
+  if (isAuthenticated) {
+    return <Navigate replace to="/" />;
+  }
 
-    const theme = createTheme();
-
-
+  function Copyright(props) {
     return (
-        
+      <Typography variant="body2" color="text.secondary" align="center" {...props}>
+        {'Copyright © '}
+        <Link color="inherit" href="https://mui.com/">
+          Talent Assessment
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
+    );
+  }
+
+  const theme = createTheme();
+
+  return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -66,7 +75,7 @@ const Login = ({ login, isAuthenticated }) => {
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
+            alignItems: 'center'
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
@@ -75,7 +84,7 @@ const Login = ({ login, isAuthenticated }) => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={e => onSubmit(e)} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={onSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -83,12 +92,12 @@ const Login = ({ login, isAuthenticated }) => {
               id="email"
               name="email"
               autoComplete="email"
-              placeholder="Enter your email" 
-              label="Email" 
-              variant="outlined" 
-              type='email'
+              placeholder="Enter your email"
+              label="Email"
+              variant="outlined"
+              type="email"
               value={email}
-              onChange={e => onChange(e)}                                
+              onChange={onChange}
               autoFocus
             />
             <TextField
@@ -100,12 +109,14 @@ const Login = ({ login, isAuthenticated }) => {
               type="password"
               id="password"
               autoComplete="current-password"
-              placeholder="Password" 
-              variant="outlined" 
+              placeholder="Password"
+              variant="outlined"
               value={password}
-              onChange={e => onChange(e)}
-              minLength='6'
+              onChange={onChange}
+              minLength="6"
             />
+            {errors.password && <Typography variant="body2" color="error">{errors.password}</Typography>}
+
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"

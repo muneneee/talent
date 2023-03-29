@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { signup } from '../actions/auth';
@@ -26,59 +26,84 @@ import CloseIcon from '@mui/icons-material/Close';
 
 const Signup = ({ signup, isAuthenticated }) => {
     const [accountCreated, setAccountCreated] = useState(false);
-    const [formData, setFormData] = useState({
+    const initialValues = {
         first_name:'', 
         last_name: '',
         email: '',
         password: '',
         re_password: ''
 
-    });
-
-    const [passwordAgain, setPasswordAgain] = useState("")
-
-
-    const [errors, setErrors ] = useState('');
-
+    };
+    const [formData, setFormData] = useState(initialValues);
+    const [isSubmit, setIsSubmit] = useState(false);
+    const [formErrors, setFormErrors ] = useState({});
+    const [errors] = useState({});
     const theme = createTheme();
 
 
-    const { first_name, last_name, email, password, re_password } = formData;
+    // const { first_name, last_name, email, password, re_password } = formData;
 
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    // const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+        console.log(formData);
+    };
 
-    const onSubmit = e => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-
         const errors = {};
-        if (!password) {
-            errors.password = 'Password is required';
-        }
-        if (!re_password) {
-            errors.re_new_password = 'Please confirm your password';
-        }
-        if (password !== re_password) {
+        setFormErrors(validate(formData));
+        if (formData.password !== formData.re_password) {
             errors.re_password = 'Passwords do not match';
-        }
-        if (Object.keys(errors).length > 0) {
-            setErrors(errors);
-            return;
-        }
-        else{
-            signup(first_name, last_name, email, password, re_password);
+        }else {
+            setIsSubmit(true);
+            signup(formData.first_name, formData.last_name, formData.email, formData.password, formData.re_password);
             setAccountCreated(true);
         }
         
     };
 
-  
+    useEffect(() => {
+        console.log(formErrors);
+        if (Object.keys(formErrors).length === 0 && isSubmit) {
+            console.log(formData)
+        }
+    }, [formErrors]);
+
+    const validate = (formData) => {
+        const errors = {};
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+        if (!formData.first_name) {
+            errors.first_name = 'First name is required!';
+        }
+        if (!formData.last_name) {
+            errors.last_name = 'Last name is required!';
+        }
+        if (!formData.email) {
+            errors.email = 'Email is required!';
+        }else if (!regex.test(formData.email)) {
+            errors.email = 'This is not a valid email format';
+        }
+        if (!formData.password) {
+            errors.password = 'Password is required!';
+        }
+        if (!formData.re_password) {
+            errors.re_password = 'Confirm password is required!';
+        }
+        if (formData.password !== formData.re_password) {
+            errors.re_password = 'Passwords do not match';
+        }
+        return errors;
+
+    };
 
 
     if (isAuthenticated) {
         return <Navigate replace to='/' />
     }
-    if (accountCreated) {
+    if (isSubmit) {
         return <Navigate replace to='/login' />
     }
 
@@ -113,7 +138,7 @@ const Signup = ({ signup, isAuthenticated }) => {
                 <Typography component="h1" variant="h5">
                     Sign Up
                 </Typography>
-                <Box component="form" onSubmit={e => onSubmit(e)} noValidate sx={{ mt: 3 }}>
+                <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -127,10 +152,11 @@ const Signup = ({ signup, isAuthenticated }) => {
                                 label="First Name" 
                                 variant="outlined" 
                                 type='text'
-                                value={first_name}
-                                onChange={e => onChange(e)}                                
+                                value={formData.first_name}
+                                onChange={handleChange}                                
                                 autoFocus
                             />
+                            {formErrors.first_name && <span>{formErrors.first_name}</span>}
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -144,10 +170,11 @@ const Signup = ({ signup, isAuthenticated }) => {
                                 label="Last Name" 
                                 variant="outlined" 
                                 type='text'
-                                value={last_name}
-                                onChange={e => onChange(e)}                                
+                                value={formData.last_name}
+                                onChange={handleChange}                                
                                 autoFocus
                             />
+                            {formErrors.last_name && <span>{formErrors.last_name}</span>}
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
@@ -161,10 +188,12 @@ const Signup = ({ signup, isAuthenticated }) => {
                                 label="Email" 
                                 variant="outlined" 
                                 type='email'
-                                value={email}
-                                onChange={e => onChange(e)}                                
+                                value={formData.email}
+                                onChange={handleChange}                                
                                 autoFocus
                             />
+                            {formErrors.email && <span>{formErrors.email}</span>}
+
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
@@ -178,13 +207,12 @@ const Signup = ({ signup, isAuthenticated }) => {
                                 autoComplete="current-password"
                                 placeholder="Password" 
                                 variant="outlined" 
-                                value={password}
-                                onChange={e => onChange(e)}
+                                value={formData.password}
+                                onChange={handleChange}                                
                                 minLength='6'
 
                             />
-                            {errors.password && <span>{errors.password}</span>}
-
+                            {formErrors.password && <span>{formErrors.password}</span>}
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
@@ -198,17 +226,18 @@ const Signup = ({ signup, isAuthenticated }) => {
                                 autoComplete="confirm-password"
                                 placeholder="Confirm Password" 
                                 variant="outlined" 
-                                value={re_password}
-                                onChange={e => onChange(e)}
+                                value={formData.re_password}
+                                onChange={handleChange}                                
                                 minLength='6'
                             />
-                            {errors.re_password && <span>{errors.re_password}</span>}
+                            {formErrors.re_password && <span>{formErrors.re_password}</span>}
+
                         </Grid>
                         <PasswordChecklist
                             rules={["minLength","specialChar","number","capital","match"]}
                             minLength={5}
-                            value={password}
-                            valueAgain={re_password}
+                            value={formData.password}
+                            valueAgain={formData.re_password}
                             onChange={(isValid) => {}}
                         />
                     </Grid>

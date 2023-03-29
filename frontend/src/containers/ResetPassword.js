@@ -58,7 +58,7 @@ const ResetPassword = ({ reset_password }) => {
                     <Typography component="h1" variant="h5">
                         Reset Password
                     </Typography>
-                    <Box component="form" onSubmit={e => onSubmit(e)} noValidate sx={{ mt: 3 }}>
+                    <Box component="form" onSubmit={e => onSubmit(e)} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
