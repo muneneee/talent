@@ -44,6 +44,9 @@ INSTALLED_APPS = [
     'djoser',
     'accounts',
     'rest_framework_simplejwt',
+    'recommender',
+    'forms',
+    'djf_surveys',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'djf_surveys.context_processors.surveys_context',
+
             ],
         },
     },
@@ -158,6 +163,9 @@ SIMPLE_JWT = {
 
    
 }
+
+DOMAIN = 'localhost:5173'
+SITE_NAME = 'Talent assessment'
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
