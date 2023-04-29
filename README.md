@@ -27,12 +27,10 @@ $ pip install -r requirements.txt
 ```
 
 <h3>Authors or Acknowledgments</h3>
-<ul>
-  <li>[Kevin Munene](https://www.github.com/muneneee)</li>
-  <li>[Peter Rogendo](https://www.github.com/Rogendo)</li>
-  <li>[Eric Mutua](https://www.github.com/am-eric)</li>
+  - [Kevin Munene](https://www.github.com/muneneee)
+  - [Peter Rogendo](https://www.github.com/Rogendo)
+  - [Eric Mutua](https://www.github.com/am-eric)
 
-</ul>
 
 <h3>License</h3>
 
