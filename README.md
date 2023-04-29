@@ -1,4 +1,3 @@
-<p align="center"><img src="logo.png" /></p>
 
 <h1 align="center"> Talent Assessment - Readme.md</h1>
 
@@ -17,13 +16,7 @@
   <li>creating and login to your account</li>
 </ul>
 
-<h3> Demo -> Show me what you got </h3>
 
-<a href="#"> Link to your awesome Demo </a>
-
-<a href="https://www.designinspiration.info/"> Design Fonts Inspiration </a>
-
-<h3> Code Demo </h3>
 
 
 <h3> Download & Installation </h3>
@@ -32,14 +25,12 @@
 $ npm install
 $ pip install -r requirements.txt
 ```
-<h3>Contributing</h3>
-Keep it simple..
 
 <h3>Authors or Acknowledgments</h3>
 <ul>
-  <li>Kevin Munene</li>
-  <li>Eric Mutua</li>
-  <li>Peter Rogendo</li>
+  <li>[Kevin Munene](https://www.github.com/muneneee)</li>
+  <li>[Peter Rogendo](https://www.github.com/Rogendo)</li>
+  <li>[Eric Mutua](https://www.github.com/am-eric)</li>
 
 </ul>
 
