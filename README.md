@@ -26,10 +26,12 @@ $ npm install
 $ pip install -r requirements.txt
 ```
 
-<h3>Authors or Acknowledgments</h3>
-  - [Kevin Munene](https://www.github.com/muneneee)
-  - [Peter Rogendo](https://www.github.com/Rogendo)
-  - [Eric Mutua](https://www.github.com/am-eric)
+## Authors
+
+- [Kevin Munene](https://www.github.com/muneneee)
+- [Peter Rogendo](https://www.github.com/Rogendo)
+- [Eric Mutua](https://www.github.com/am-eric)
+
 
 
 <h3>License</h3>
