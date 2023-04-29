@@ -1,5 +1,5 @@
 
-<h1 align="center"> Talent Assessment - Readme.md</h1>
+<h1 align="center"> Talent Assessment</h1>
 
 <p align="center"> Intro - Welcome to Career Recommendation and Talent Assessment, the ultimate destination for students who are looking to explore their career options.</p>
 
